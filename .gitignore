@@ -1,0 +1,4 @@
+dwmbar
+*.o
+example_inotify.c
+valgrind-out.txt
