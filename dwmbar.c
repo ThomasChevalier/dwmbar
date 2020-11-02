@@ -79,6 +79,9 @@ static char* bat_present_sensor; // "/sys/class/power_supply/BAT0/present"
 static char* bat_capa_sensor;    // "/sys/class/power_supply/BAT0/capacity"
 static char* mem_sensor;         // "/proc/meminfo"
 
+static const char* brightness_file = "/mnt/data/Programmation/Archlinux/Scripts/brightness_control/current";
+static const char* volume_file = "/mnt/data/Programmation/Archlinux/Scripts/volume_control/current";
+
 /* function implementations */
 
 void time_callback(Block* blk)
@@ -125,10 +128,10 @@ void volume_callback(Block* blk)
     free(blk->data.text);
 
     /* Read current volume */
-    debug_printf("reading /home/thomas/volume_control/current\n");
-    char* content = read_file("/home/thomas/volume_control/current");
+    debug_printf("reading %s\n", volume_file);
+    char* content = read_file(volume_file);
     if(content == NULL){
-        fprintf(stderr, "Cannot read /home/thomas/volume_control/current\n");
+        fprintf(stderr, "Cannot read %s\n", volume_file);
         return;
     }
 
@@ -403,9 +406,9 @@ void brightness_callback(Block* blk)
     blk->data.icon = "☀";
     free(blk->data.text);
 
-    char* brightness = read_file("/home/thomas/brightness_control/current");
+    char* brightness = read_file(brightness_file);
     if(brightness == NULL){
-        fprintf(stderr, "Cannot read /home/thomas/brightness_control/current\n");
+        fprintf(stderr, "Cannot read %s\n", brightness_file);
         return;
     }
 
@@ -431,7 +434,7 @@ void *listener_volume(void* p_data)
 {
     Block* blk = (Block*)p_data;
     safe_callback(blk, volume_callback, &update_cond);
-    file_listener(blk, "/mnt/data/Programmation/Archlinux/Script/volume_control/current", volume_callback, &update_cond);
+    file_listener(blk, volume_file, volume_callback, &update_cond);
     return (void*)0;
 }
 
@@ -479,7 +482,7 @@ void *listener_brightness(void* p_data)
 {   
     Block* blk = (Block*)p_data;
     safe_callback(blk, brightness_callback, &update_cond);
-    file_listener(blk, "/mnt/data/Programmation/Archlinux/Script/brightness_control/current", brightness_callback, &update_cond);
+    file_listener(blk, brightness_file, brightness_callback, &update_cond);
     return (void*)0;
 }
 
