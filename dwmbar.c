@@ -431,7 +431,7 @@ void *listener_volume(void* p_data)
 {
     Block* blk = (Block*)p_data;
     safe_callback(blk, volume_callback, &update_cond);
-    file_listener(blk, "/home/thomas/volume_control/current", volume_callback, &update_cond);
+    file_listener(blk, "/mnt/data/Programmation/Archlinux/Script/volume_control/current", volume_callback, &update_cond);
     return (void*)0;
 }
 
@@ -479,7 +479,7 @@ void *listener_brightness(void* p_data)
 {   
     Block* blk = (Block*)p_data;
     safe_callback(blk, brightness_callback, &update_cond);
-    file_listener(blk, "/home/thomas/brightness_control/current", brightness_callback, &update_cond);
+    file_listener(blk, "/mnt/data/Programmation/Archlinux/Script/brightness_control/current", brightness_callback, &update_cond);
     return (void*)0;
 }
 
