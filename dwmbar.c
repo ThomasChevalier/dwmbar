@@ -33,6 +33,7 @@ void temperature_callback  (Block* blk);
 void fan_callback          (Block* blk);
 void mem_callback          (Block* blk);
 void brightness_callback   (Block* blk);
+void keyboard_callback     (Block* blk);
 
 void *listener_time        (void*);
 void *listener_volume      (void*);
@@ -42,6 +43,7 @@ void *listener_temperature (void*);
 void *listener_fan         (void*);
 void *listener_mem         (void*);
 void *listener_brightness  (void*);
+void *listener_keyboard    (void*);
 
 void detect_sensors(void);
 
@@ -51,6 +53,7 @@ void detect_sensors(void);
 static Display *dpy;
 
 static Block blocks[] = {
+    BLOCK_DEF(listener_keyboard),
     BLOCK_DEF(listener_temperature),
     BLOCK_DEF(listener_fan),
     BLOCK_DEF(listener_mem),
@@ -81,6 +84,7 @@ static char* mem_sensor;         // "/proc/meminfo"
 
 static const char* brightness_file = "/mnt/data/Programmation/Archlinux/Scripts/brightness_control/current";
 static const char* volume_file = "/mnt/data/Programmation/Archlinux/Scripts/volume_control/current";
+static const char* keyboard_file = "/mnt/data/Programmation/Archlinux/Scripts/keyboard_control/current";
 
 /* function implementations */
 
@@ -132,10 +136,9 @@ void volume_callback(Block* blk)
     char* content = read_file(volume_file);
     if(content == NULL){
         fprintf(stderr, "Cannot read %s\n", volume_file);
+        blk->data.text = NULL;
         return;
     }
-
-    
 
     // Block data generation
     if(is_num(content)){
@@ -409,6 +412,7 @@ void brightness_callback(Block* blk)
     char* brightness = read_file(brightness_file);
     if(brightness == NULL){
         fprintf(stderr, "Cannot read %s\n", brightness_file);
+        blk->data.text = NULL;
         return;
     }
 
@@ -420,6 +424,23 @@ void brightness_callback(Block* blk)
         blk->data.text = strip(brightness);
     }
     free(brightness);
+}
+
+void keyboard_callback(Block* blk)
+{
+    blk->data.color = "#8cbea2";
+    blk->data.icon = "K";
+    free(blk->data.text);
+
+    char* layout = read_file(keyboard_file);
+    if(layout == NULL){
+        fprintf(stderr, "Cannot read %s\n", keyboard_file);
+        blk->data.text = NULL;
+        return;
+    }
+
+    blk->data.text = strip(layout);
+    free(layout);
 }
 
 void* listener_time(void* p_data)
@@ -483,6 +504,14 @@ void *listener_brightness(void* p_data)
     Block* blk = (Block*)p_data;
     safe_callback(blk, brightness_callback, &update_cond);
     file_listener(blk, brightness_file, brightness_callback, &update_cond);
+    return (void*)0;
+}
+
+void *listener_keyboard(void *p_data)
+{
+    Block* blk = (Block*)p_data;
+    safe_callback(blk, keyboard_callback, &update_cond);
+    file_listener(blk, keyboard_file, keyboard_callback, &update_cond);
     return (void*)0;
 }
 
