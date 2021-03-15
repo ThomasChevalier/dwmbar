@@ -3,7 +3,7 @@
 
 #include "block.h"
 
-void file_listener(Block* blk, char* file, void (*callback)(Block*), pthread_cond_t* update_cond);
+void file_listener(Block* blk, const char* file, void (*callback)(Block*), pthread_cond_t* update_cond);
 void aligned_time_listener(time_t align, time_t interval, Block* blk, void (*callback)(Block*), pthread_cond_t* update_cond);
 void time_listener(time_t interval, Block* blk, void (*callback)(Block*), pthread_cond_t* update_cond);
 

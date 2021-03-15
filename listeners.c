@@ -9,7 +9,7 @@
 #include <unistd.h>
 
 
-void file_listener(Block* blk, char* file, void (*callback)(Block*), pthread_cond_t* update_cond)
+void file_listener(Block* blk, const char* file, void (*callback)(Block*), pthread_cond_t* update_cond)
 {
     // See man inotify(1) for reference
 

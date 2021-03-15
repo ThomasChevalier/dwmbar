@@ -7,7 +7,7 @@
 
 char* smprintf(char *fmt, ...);
 char* strip(char*);
-char* read_file(char *path);
+char* read_file(const char *path);
 int is_num(char* str);
 int all_space(char *str);
 

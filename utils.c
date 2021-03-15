@@ -60,7 +60,7 @@ char* strip(char *str){
     return stripped;
 }
 
-char* read_file(char *path)
+char* read_file(const char *path)
 {
     if(!path){
         return NULL;
@@ -120,7 +120,10 @@ int all_space(char *str){
 
 char* build_block_string(BlockData* data, const char* bar_color)
 {
-    if(strlen(data->icon) != 0 && strlen(data->text) != 0){
+    const unsigned lenData = data->icon ? strlen(data->icon) : 0;
+    const unsigned lenText = data->text ? strlen(data->text) : 0;
+
+    if(lenData != 0 && lenText != 0){
         if(all_space(data->text)){
             return smprintf("^c%s^^b%s^ %s ^c%s^^b%s^%s", bar_color, data->color, data->icon, data->color, bar_color, data->text);
         }else{
@@ -128,14 +131,14 @@ char* build_block_string(BlockData* data, const char* bar_color)
         }
     }
 
-    else if (strlen(data->icon) == 0 && strlen(data->text) != 0){
+    else if (lenData == 0 && lenText != 0){
         if(all_space(data->text)){
             return smprintf("%s", data->text);
         }else{
             return smprintf("^c%s^^b%s^ %s ", data->color, bar_color, data->text);
         }
     }
-    else if (strlen(data->icon) != 0 && strlen(data->text) == 0){
+    else if (lenData != 0 && lenText == 0){
         return smprintf("^c%s^^b%s^ %s ", bar_color, data->color, data->icon);
     }
     else{
