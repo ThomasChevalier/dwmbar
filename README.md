@@ -44,7 +44,7 @@ The application is multi-threaded, and each block runs in its own thread. Thus t
 Three types of listeners are implemented:
 
 * `time_listener`: the simplest one, simply sleep for a given interval then launch the callback.
-* `aligned_time_listener`: a variant of the first listener, update a block every n seconds but align the interval on an unix timestamp. For example, the clock should be updated every 60 seconds, but I want it to change instantaneously when the minute changes. For that, we align the update interval on the timestamp `1592384460`, which is exactly 09:01:00 UTC.
+* `aligned_time_listener`: a variant of the first listener, update a block every n seconds but align the interval on an unix timestamp. For example, the clock should be updated every 60 seconds, but I want it to change instantaneously when the minute changes. For that, we align the update interval on the timestamp `1592384460`, which is exactly 09:01:00 GMT.
 * `file_listener`: update the block every time the content of a file changes. It uses the `inotify` linux kernel library to monitor the specified files.
 
 The aligned time listener is only used for the clock.
